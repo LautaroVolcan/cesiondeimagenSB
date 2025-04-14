@@ -11,7 +11,7 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f7f8fa;
+      background-color: #024974;
       display: flex;
       justify-content: center;
       align-items: flex-start;
@@ -159,8 +159,7 @@
           nombre: nombre,
           dni: dni,
           fecha: fecha,
-          pdf_base64: base64PDF
-        };
+         attachment: `data:application/pdf;base64,${base64PDF}`};
 
         emailjs.send('service_udeso12', 'template_q80zfo8', emailParams)
           .then(() => {
