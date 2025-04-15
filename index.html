@@ -124,53 +124,60 @@
     }
 
     async function enviarFormulario() {
-      const nombre = document.getElementById("nombre").value;
-      const dni = document.getElementById("dni").value;
-      const fecha = document.getElementById("fecha").value;
+  const nombre = document.getElementById("nombre").value;
+  const dni = document.getElementById("dni").value;
+  const fecha = document.getElementById("fecha").value;
 
-      if (!nombre || !dni || !fecha || signaturePad.isEmpty()) {
-        alert("Por favor completa todos los campos y firma.");
-        return;
-      }
+  if (!nombre || !dni || !fecha || signaturePad.isEmpty()) {
+    alert("Por favor completa todos los campos y firma.");
+    return;
+  }
 
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
 
-      doc.setFontSize(12);
-      doc.text("CESIÓN DE DERECHOS DE IMAGEN", 20, 20);
-      doc.text(`Yo, ${nombre}, con documento de identidad número ${dni}, en calidad de participante en el Programa ActICorazón,`, 20, 30, { maxWidth: 170 });
-      doc.text("cedo en forma gratuita, permanente e irrevocable, todos los derechos de mi imagen y voz a las empresas en adelante denominadas 'Siel Bleu, Lilly y/o Boehringer Ingelheim'.", 20, 45, { maxWidth: 170 });
-      doc.text("Por la presente, autorizo a Siel Bleu, Lilly y/o Boehringer Ingelheim a utilizar, reproducir, distribuir, comunicar públicamente y exhibir mi imagen y voz en cualquier medio y formato, ya sea impreso, digital o audiovisual, con fines promocionales, publicitarios, comerciales, educativos o informativos relacionados con las actividades de dichas empresas, sin limitación geográfica.", 20, 60, { maxWidth: 170 });
-      doc.text("Asimismo, declaro que la presente cesión no infringe los derechos de terceros y que cuento con la capacidad legal necesaria para otorgarla.", 20, 90, { maxWidth: 170 });
-      doc.text("La presente cesión se otorga en virtud del consentimiento libre y voluntario de ambas partes.", 20, 105, { maxWidth: 170 });
-      doc.text(`Firmado a los ${fecha.split("-")[2]} días del mes de ${fecha.split("-")[1]} de ${fecha.split("-")[0]}`, 20, 120);
+  doc.setFontSize(12);
+  doc.text("CESIÓN DE DERECHOS DE IMAGEN", 20, 20);
+  doc.text(`Yo, ${nombre}, con documento de identidad número ${dni}, en calidad de participante en el Programa ActICorazón,`, 20, 30, { maxWidth: 170 });
+  doc.text("cedo en forma gratuita, permanente e irrevocable, todos los derechos de mi imagen y voz a las empresas en adelante denominadas 'Siel Bleu, Lilly y/o Boehringer Ingelheim'.", 20, 45, { maxWidth: 170 });
+  doc.text("Por la presente, autorizo a Siel Bleu, Lilly y/o Boehringer Ingelheim a utilizar, reproducir, distribuir, comunicar públicamente y exhibir mi imagen y voz en cualquier medio y formato, ya sea impreso, digital o audiovisual, con fines promocionales, publicitarios, comerciales, educativos o informativos relacionados con las actividades de dichas empresas, sin limitación geográfica.", 20, 60, { maxWidth: 170 });
+  doc.text("Asimismo, declaro que la presente cesión no infringe los derechos de terceros y que cuento con la capacidad legal necesaria para otorgarla.", 20, 90, { maxWidth: 170 });
+  doc.text("La presente cesión se otorga en virtud del consentimiento libre y voluntario de ambas partes.", 20, 105, { maxWidth: 170 });
+  doc.text(`Firmado a los ${fecha.split("-")[2]} días del mes de ${fecha.split("-")[1]} de ${fecha.split("-")[0]}`, 20, 120);
 
-      const imgData = signaturePad.toDataURL();
-      doc.addImage(imgData, 'PNG', 20, 130, 60, 30);
+  const imgData = signaturePad.toDataURL();
+  doc.addImage(imgData, 'PNG', 20, 130, 60, 30);
 
-      const pdfBlob = doc.output("blob");
-      const reader = new FileReader();
-      reader.readAsDataURL(pdfBlob);
-      reader.onloadend = function () {
-        const base64PDF = reader.result.split(',')[1];
+  // Creamos el blob del PDF
+  const pdfBlob = doc.output("blob");
+  const pdfFile = new File([pdfBlob], "cesion_derechos.pdf", { type: "application/pdf" });
 
-        const emailParams = {
-          to_email: 'lautaro.ferrandi@sielbleu.es',
-          nombre: nombre,
-          dni: dni,
-          fecha: fecha,
-         attachment: `data:application/pdf;base64,${base64PDF}`};
+  // Detectamos si es un móvil
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        emailjs.send('service_udeso12', 'template_q80zfo8', emailParams)
-          .then(() => {
-            alert('Formulario enviado correctamente.');
-          })
-          .catch((error) => {
-            console.error('Error al enviar el formulario:', error);
-            alert('Hubo un problema al enviar el formulario.');
-          });
-      }
+  if (isMobile && navigator.share) {
+    try {
+      await navigator.share({
+        title: "Cesión de Derechos de Imagen",
+        text: "Aquí está el documento que acabas de firmar.",
+        files: [pdfFile],
+      });
+    } catch (err) {
+      alert("Se canceló el envío o hubo un error.");
     }
+  } else {
+    // En escritorio, forzamos la descarga
+    const url = URL.createObjectURL(pdfBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "cesion_derechos.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+}
+
   </script>
 </body>
 </html>
