@@ -82,22 +82,22 @@
 </head>
 <body>
   <div class="container">
-    <h2>Formulario de Cesión de Derechos</h2>
+    <h2>Formulario de Cesión de Derechos de imagen - Fundacion Siel Bleu</h2>
     <p class="info">
       Aquí podrás leer lo que estás por firmar. Luego podrás completar los datos en el formulario de abajo y firmar.
       Cuando presiones "Enviar", se generará un PDF con todos los datos y tu firma, y se enviará automáticamente a Siel Bleu.
     </p>
     <div class="documento">
-      CESIÓN DE DERECHOS DE IMAGEN
+      CESIÓN DE DERECHOS DE IMAGEN - Fundación Siel Bleu
       
-      Yo, <i>nombre completo</i>, con documento de identidad número <i>DNI</i>, en calidad de participante en el Programa ActICorazón,
-      cedo en forma gratuita, permanente e irrevocable, todos los derechos de mi imagen y voz a las empresas en adelante denominadas "Siel Bleu, Lilly y/o Boehringer Ingelheim".
+      Yo, <i>[nombre completo]</i>, con documento de identidad número <i>[DNI]</i>, en calidad de participante en actividades desarrolladas en el marco de los programas impulsados por la Fundación Siel Bleu y/o Boehringer Ingelheim, manifiesto expresamente mi consentimiento para ceder en forma gratuita, permanente e irrevocable, todos los derechos sobre mi imagen y voz a dichas entidades.
 
-      Por la presente, autorizo a Siel Bleu, Lilly y/o Boehringer Ingelheim a utilizar, reproducir, distribuir, comunicar públicamente y exhibir mi imagen y voz en cualquier medio y formato, ya sea impreso, digital o audiovisual, con fines promocionales, publicitarios, comerciales, educativos o informativos relacionados con las actividades de dichas empresas, sin limitación geográfica.
+Autorizo a la Fundación Siel Bleu y Boehringer Ingelheim, de forma conjunta o separada, a utilizar, reproducir, distribuir, comunicar públicamente y exhibir mi imagen y voz en cualquier medio y formato, ya sea impreso, digital, audiovisual o de cualquier otro tipo, con fines promocionales, publicitarios, educativos, informativos o institucionales, relacionados con sus actividades.
 
-      Asimismo, declaro que la presente cesión no infringe los derechos de terceros y que cuento con la capacidad legal necesaria para otorgarla.
+Asimismo, declaro que la presente cesión no infringe los derechos de terceros y que cuento con la capacidad legal necesaria para otorgarla.
 
-      La presente cesión se otorga en virtud del consentimiento libre y voluntario de ambas partes.
+Esta autorización se concede sin limitación geográfica y sin restricción de tiempo.
+La presente cesión se firma en virtud del consentimiento libre, informado y voluntario de mi parte.
     </div>
     <label>Nombre completo</label>
     <input type="text" id="nombre" />
@@ -137,12 +137,12 @@
   const doc = new jsPDF();
 
   doc.setFontSize(12);
-  doc.text("CESIÓN DE DERECHOS DE IMAGEN", 20, 20);
-  doc.text(`Yo, ${nombre}, con documento de identidad número ${dni}, en calidad de participante en el Programa ActICorazón,`, 20, 30, { maxWidth: 170 });
-  doc.text("Cedo en forma gratuita, permanente e irrevocable, todos los derechos de mi imagen y voz a las empresas en adelante denominadas 'Siel Bleu, y/o Boehringer Ingelheim'.", 20, 45, { maxWidth: 170 });
-  doc.text("Por la presente, autorizo a Siel Bleu, y/o Boehringer Ingelheim a utilizar, reproducir, distribuir, comunicar públicamente y exhibir mi imagen y voz en cualquier medio y formato, ya sea impreso, digital o audiovisual, con fines promocionales, publicitarios, comerciales, educativos o informativos relacionados con las actividades de dichas empresas, sin limitación geográfica.", 20, 60, { maxWidth: 170 });
+  doc.text("CESIÓN DE DERECHOS DE IMAGEN - Fundación Siel Bleu", 20, 20);
+  doc.text(`Yo, ${nombre}, con documento de identidad número ${dni}, en calidad de participante en actividades desarrolladas en el marco de los programas impulsados por la Fundación Siel Bleu y/o Boehringer Ingelheim,`, 20, 30, { maxWidth: 170 });
+  doc.text("manifiesto expresamente mi consentimiento para ceder en forma gratuita, permanente e irrevocable, todos los derechos sobre mi imagen y voz a dichas entidades.", 20, 45, { maxWidth: 170 });
+  doc.text("Autorizo a la Fundación Siel Bleu y Boehringer Ingelheim, de forma conjunta o separada, a utilizar, reproducir, distribuir, comunicar públicamente y exhibir mi imagen y voz en cualquier medio y formato, ya sea impreso, digital, audiovisual o de cualquier otro tipo, con fines promocionales, publicitarios, educativos, informativos o institucionales, relacionados con sus actividades.", 20, 60, { maxWidth: 170 });
   doc.text("Asimismo, declaro que la presente cesión no infringe los derechos de terceros y que cuento con la capacidad legal necesaria para otorgarla.", 20, 90, { maxWidth: 170 });
-  doc.text("La presente cesión se otorga en virtud del consentimiento libre y voluntario de ambas partes.", 20, 105, { maxWidth: 170 });
+  doc.text("Esta autorización se concede sin limitación geografica y sin restricción de tiempo. La presente cesión se firma en virtud del consentimiento libre, informado y voluntario de mi parte.", 20, 105, { maxWidth: 170 });
   doc.text(`Firmado a los ${fecha.split("-")[2]} días del mes de ${fecha.split("-")[1]} de ${fecha.split("-")[0]}`, 20, 120);
 
   const imgData = signaturePad.toDataURL();
@@ -150,7 +150,7 @@
 
   // Creamos el blob del PDF
   const pdfBlob = doc.output("blob");
-  const pdfFile = new File([pdfBlob], "cesion_derechos.pdf", { type: "application/pdf" });
+  const pdfFile = new File([pdfBlob], "Cesión_derechos.pdf", { type: "application/pdf" });
 
   // Detectamos si es un móvil
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -170,7 +170,7 @@
     const url = URL.createObjectURL(pdfBlob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "cesion_derechos.pdf";
+    a.download = "Cesión_derechos.pdf";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
